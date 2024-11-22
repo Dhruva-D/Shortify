@@ -4,10 +4,12 @@ const urlRoute = require('./routes/url')
 const cors = require('cors');
 
 const app = express();
+
+// Allow CORS for your frontend domain
 app.use(cors({
-  origin: ["https://shortify-url-three.vercel.app/"], 
+  origin: "https://shortify-url-three.vercel.app",  // Add your frontend domain
   methods: ["GET", "POST"],
-  credentials: true,
+  credentials: true,  // Allow credentials if needed
 }));
 
 
