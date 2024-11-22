@@ -11,8 +11,6 @@ app.use(cors({
 }));
 
 
-
-
 const PORT = 3000;
 
 connectToMongoDB('mongodb+srv://dhruvad575:DJvOwdRN4Pj5od5u@cluster0.vppvt.mongodb.net/shortify?retryWrites=true&w=majority&appName=Cluster0')
