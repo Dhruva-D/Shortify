@@ -4,13 +4,20 @@ const urlRoute = require('./routes/url')
 const cors = require('cors');
 
 const app = express();
-app.use(cors()); // Add this line to enable CORS for all routes
+app.use(cors(
+  {
+    origin: ["https://shortify-pied.vercel.app/"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  }
+)); // Add this line to enable CORS for all routes
 
 
 
 const PORT = 3000;
 
-connectToMongoDB('mongodb://localhost:27017/short-url').then( () => console.log("Connected to MongoDB"))
+connectToMongoDB('mongodb+srv://dhruvad575:DJvOwdRN4Pj5od5u@cluster0.vppvt.mongodb.net/shortify?retryWrites=true&w=majority&appName=Cluster0')
+.then( () => console.log("Connected to MongoDB"))
 
 app.use(express.json());//gives beloow error if not used 
 // if (!body.url) return res.status(400).send("URL is REQUIRED") //.json({ error: 'url is required'})
