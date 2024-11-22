@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-  origin: ["https://shortify-url-three.vercel.app"], 
+  origin: ["https://shortify-url-three.vercel.app/"], 
   methods: ["GET", "POST"],
   credentials: true,
 }));
