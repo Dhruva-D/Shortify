@@ -6,6 +6,7 @@ const urlSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      index: true
     },
     redirectURL: {
       type:String,
@@ -19,3 +20,5 @@ const urlSchema = new mongoose.Schema(
 const URL = mongoose.model("url", urlSchema);
 
 module.exports = URL;
+
+

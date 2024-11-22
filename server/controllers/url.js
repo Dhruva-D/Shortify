@@ -4,18 +4,24 @@ const URL = require('../models/url')
 const uid = new ShortUniqueId({length: 8});
 
 async function handelGenerateNewShortURL(req, res) {
-  const body = req.body;
-  if (!body.url) return res.status(400).json({ error: 'url is required'})
-  const uniqueId = uid.rnd();
+  try {
+    const body = req.body;
+    if (!body.url) return res.status(400).json({ error: 'URL is required' });
 
-  await URL.create({
-    shortID: uniqueId,
-    redirectURL: body.url,
-    visitHistory: [],
-  });
+    const uniqueId = uid.rnd();
+    await URL.create({
+      shortID: uniqueId,
+      redirectURL: body.url,
+      visitHistory: [],
+    });
 
-  return res.json({ id: uniqueId })
+    res.json({ id: uniqueId });
+  } catch (error) {
+    console.error('Error generating URL:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
+
 
 async function handelRedirectToURL(req, res) {
   const shortID = req.params.shortID;
@@ -36,7 +42,8 @@ async function handelRedirectToURL(req, res) {
 
 async function handelGetAnalytics(req, res) {
   const shortID = req.params.shortID;
-  const result = await URL.findOne({ shortID })
+  const result = await URL.findOne({ shortID }).lean(); // Use lean() to improve query speed
+
 
   return res.json({
     totalClicks: result.visitHistory.length,

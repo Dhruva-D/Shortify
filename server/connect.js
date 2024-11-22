@@ -1,8 +1,14 @@
 const mongoose = require('mongoose')
 
-async function connectToMongoDB(url) {
-  return mongoose.connect(url);
-}
+const connectToMongoDB = async () => {
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(url, {
+      serverSelectionTimeoutMS: 5000,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  }
+};
 
 module.exports = {
   connectToMongoDB,
