@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        input[type="url"], input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #shortenedUrl {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>URL Shortener</h2>
+        <input type="url" id="originalUrl" placeholder="Enter original URL" required>
+        <button onclick="shortenUrl()">Shorten URL</button>
+        <div id="shortenedUrl"></div>
+
+        <h3>View Analytics</h3>
+        <input type="text" id="shortUrlInput" placeholder="Enter shortened URL">
+        <button onclick="viewAnalytics()">View Analytics</button>
+        <div id="analyticsURL" style="margin-top: 20px;"></div>
+
+    </div>
+
+    <script>
+        async function shortenUrl() {
+            const originalUrl = document.getElementById('originalUrl').value;
+            if (!originalUrl) {
+                alert("Please enter a valid URL.");
+                return;
+            }
+            try {
+                const response = await fetch('http://localhost:3000/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: originalUrl })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('shortenedUrl').innerText = `Short URL: http://localhost:3000/${result.id}`;
+                } else {
+                    alert(result.message || 'Error shortening URL');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to the server.');
+            }
+        }
+
+        async function viewAnalytics() {
+          const shortUrl = document.getElementById('shortUrlInput').value.trim();
+          if (!shortUrl) {
+              alert("Please enter a shortened URL.");
+              return;
+          }
+
+          const encodedUrl = encodeURIComponent(shortUrl);
+
+          try {
+              // Fetch analytics data from the backend
+              const response = await fetch(`http://localhost:3000/analytics/${encodedUrl}`);
+              
+              if (response.ok) {
+                  // Parse the response JSON
+                  const result = await response.json();
+                  
+                  // Extract only timestamps from the analytics array
+                  const timestamps = result.analytics.map(entry => entry.timestamp);
+
+                  // Display the timestamps
+                  document.getElementById('analyticsURL').innerHTML = `
+                      <strong>Clicks:</strong> ${result.totalClicks}<br>
+                      <strong>Analytics:</strong><br>
+                      <ul>
+                          ${timestamps.map(timestamp => `<li>${timestamp}</li>`).join('')}
+                      </ul>
+                  `;
+              } else {
+                  alert('Error fetching analytics');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              alert('Failed to connect to the server.');
+          }
+        }
+
+
+    </script>
+</body>
+</html>
