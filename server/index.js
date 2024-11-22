@@ -15,7 +15,7 @@ app.use(cors({
 const PORT = 3000;
 
 connectToMongoDB('mongodb+srv://dhruvad575:DJvOwdRN4Pj5od5u@cluster0.vppvt.mongodb.net/shortify?retryWrites=true&w=majority&appName=Cluster0')
-.then( () => console.log("Connected to MongoDB"))
+.then( () => console.log("Connected to MongoDB")).catch((err) => console.log('error', err))
 
 app.use(express.json());//gives beloow error if not used 
 // if (!body.url) return res.status(400).send("URL is REQUIRED") //.json({ error: 'url is required'})
