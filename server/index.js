@@ -24,6 +24,10 @@ app.use(express.json());//gives beloow error if not used
 // TypeError: Cannot read properties of undefined (reading 'url')
 
 app.use('/', urlRoute)
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
 
 
 app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
