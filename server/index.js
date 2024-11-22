@@ -4,13 +4,11 @@ const urlRoute = require('./routes/url')
 const cors = require('cors');
 
 const app = express();
-app.use(cors(
-  {
-    origin: ["https://shortify-url-three.vercel.app"],
-    methods: ["GET", "POST"],
-    credentials: true,
-  }
-)); // Add this line to enable CORS for all routes
+app.use(cors({
+  origin: "https://shortify-url-three.vercel.app", 
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
 
 
 
